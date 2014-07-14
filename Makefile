@@ -16,6 +16,7 @@ GREEN=\033[92m
 GREY=\033[90m
 BLUE=\033[94m
 BBLUE=\033[1;94m
+ACTIVEC=$(WHITE)
 
 OBJS := test.o main.o
 
@@ -26,7 +27,7 @@ vpath %.o $(OBJDIR)
 all: $(DISTDIR)/carbon
 
 $(DISTDIR)/carbon: $(DISTDIR) $(OBJS) 
-	@echo "$(GREY) Making Executable  $(WHITE)" 
+	@echo "$(ACTIVEC) Making Executable  $(WHITE)" 
 	@cd $(OBJDIR) && $(CXX) $(OBJS) -o ../dist/$(EXECNAME)
 
 $(DISTDIR):
@@ -34,7 +35,7 @@ $(DISTDIR):
 	@mkdir -p $(OBJDIR)
 
 %.o: $(SOURCEDIR)/%.cpp
-	@echo "$(GREY) Compiling $(GREEN)$(SOURCEDIR)/$*.cpp $(WHITE)"
+	@echo "$(ACTIVEC) Compiling $(GREEN)$(SOURCEDIR)/$*.cpp $(WHITE)"
 	@$(CXX) $(CXXFLAGS) -I$(INCLUDEDIR) -c $(CXXFLAGS) $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o
 	
 clean:
