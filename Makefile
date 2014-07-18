@@ -18,7 +18,7 @@ BLUE=\033[94m
 BBLUE=\033[1;94m
 ACTIVEC=$(WHITE)
 
-OBJS := test.o main.o
+OBJS := Socket.o SocketServer.o LogSystem.o main.o
 
 vpath %.o $(OBJDIR)
 #vpath carbon $(DISTDIR)
@@ -28,7 +28,7 @@ all: $(DISTDIR)/carbon
 
 $(DISTDIR)/carbon: $(DISTDIR) $(OBJS) 
 	@echo "$(ACTIVEC) Making Executable  $(WHITE)" 
-	@cd $(OBJDIR) && $(CXX) $(OBJS) -o ../dist/$(EXECNAME)
+	@cd $(OBJDIR) && $(CXX) $(OBJS) -pthread -o  ../dist/$(EXECNAME)
 
 $(DISTDIR):
 	@mkdir -p $(DISTDIR)
@@ -36,7 +36,7 @@ $(DISTDIR):
 
 %.o: $(SOURCEDIR)/%.cpp
 	@echo "$(ACTIVEC) Compiling $(GREEN)$(SOURCEDIR)/$*.cpp $(WHITE)"
-	@$(CXX) $(CXXFLAGS) -I$(INCLUDEDIR) -c $(CXXFLAGS) $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o
+	$(CXX) -I$(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o  
 	
 clean:
 	rm -rf $(BUILDDIR)
