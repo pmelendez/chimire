@@ -6,8 +6,10 @@ OUTPUTNAME=carbon
 BUILDDIR=./builds
 DISTDIR=$(BUILDDIR)/dist
 OBJDIR=$(BUILDDIR)/objs
+LIBDIR=../../libraries
 EXECNAME=carbon
 CXXFILES= test.o  main.o
+LIBS= -ljson
 
 YELLOW=\033[93m
 RED=\033[91m
@@ -21,14 +23,15 @@ ACTIVEC=$(WHITE)
 OBJS := Socket.o SocketServer.o LogSystem.o main.o
 
 vpath %.o $(OBJDIR)
+vpath %.a $(OBJDIR)
 #vpath carbon $(DISTDIR)
 
 .PHONY: all test dir
 all: $(DISTDIR)/carbon
 
-$(DISTDIR)/carbon: $(DISTDIR) $(OBJS) 
-	@echo "$(ACTIVEC) Making Executable  $(WHITE)" 
-	@cd $(OBJDIR) && $(CXX) $(OBJS) -pthread -o  ../dist/$(EXECNAME)
+$(DISTDIR)/carbon: $(DISTDIR) $(OBJS)
+	@echo "$(ACTIVEC) Making Executable $(YELLOW) $(DISTDIR)/$(EXECNAME)  $(WHITE)" 
+	@cd $(OBJDIR) && $(CXX) $(OBJS) -L$(LIBDIR)  -pthread $(LIBS)  -o ../dist/$(EXECNAME)
 
 $(DISTDIR):
 	@mkdir -p $(DISTDIR)
@@ -36,7 +39,7 @@ $(DISTDIR):
 
 %.o: $(SOURCEDIR)/%.cpp
 	@echo "$(ACTIVEC) Compiling $(GREEN)$(SOURCEDIR)/$*.cpp $(WHITE)"
-	$(CXX) -I$(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o  
+	@$(CXX) -I$(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o  
 	
 clean:
 	rm -rf $(BUILDDIR)
