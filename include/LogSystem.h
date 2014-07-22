@@ -40,14 +40,7 @@ public:
 private:
 
     LogSystem();
-    LogSystem(std::string prefix);
-    LogSystem(const LogSystem& orig);
-
     std::ofstream file;
-
-    void check_if_open();
-
-    std::string m_prefix;
 };
 
 static const char* endl="\n";

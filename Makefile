@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=c++11 
+CXXFLAGS=-std=c++11 #-Wall -Werror 
 INCLUDEDIR=./include/
 SOURCEDIR=./src
 OUTPUTNAME=carbon
@@ -39,7 +39,7 @@ $(DISTDIR):
 
 %.o: $(SOURCEDIR)/%.cpp
 	@echo "$(ACTIVEC) Compiling $(GREEN)$(SOURCEDIR)/$*.cpp $(WHITE)"
-	@$(CXX) -I$(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o 2>&1 | grep error  
+	@$(CXX) -I$(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o #2>&1 | grep error  
 	
 clean:
 	rm -rf $(BUILDDIR)
