@@ -50,9 +50,9 @@ private:
     std::string m_prefix;
 };
 
-static LogSystem& _Log = LogSystem::get();
-static LogSystem& cout = LogSystem::get();
 static const char* endl="\n";
+
+#define _Log LogSystem::get() 
 
 #endif	/* _LOGSYSTEM_H */
 

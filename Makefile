@@ -39,7 +39,7 @@ $(DISTDIR):
 
 %.o: $(SOURCEDIR)/%.cpp
 	@echo "$(ACTIVEC) Compiling $(GREEN)$(SOURCEDIR)/$*.cpp $(WHITE)"
-	@$(CXX) -I$(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o  
+	@$(CXX) -I$(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o 2>&1 | grep error  
 	
 clean:
 	rm -rf $(BUILDDIR)
