@@ -43,7 +43,7 @@ private:
     std::ofstream file;
 };
 
-static const char* endl="\n";
+//static const char* endl="\n";
 
 #define _Log LogSystem::get() 
 

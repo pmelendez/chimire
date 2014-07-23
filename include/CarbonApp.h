@@ -26,8 +26,6 @@ class CarbonApp {
             if(run_once)
             {
                 run_once = false;
-                int n=-1,pid;
-                bool accepted;
                 std::string msg;
 
                 (void) signal(SIGKILL,killed);

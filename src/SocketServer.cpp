@@ -107,12 +107,15 @@ int SocketServer::receive_messages(std::string& msg)
             // PM@TODO In the case of last message time we should try to write on the socket to see if it is responding.
             // some like <if last_msg_delta >= MAXTIME*3/4 then send a keep alive message>
 
-            clock_t current= std::clock();
-            clock_t clock_delta, last_msg_delta, accepted_time;
+            /*clock_t current= std::clock();
+            clock_t clock_delta, accepted_time;
+            clock_t last_msg_delta;
 
             accepted_time = _socket.get_accepted_time();
             clock_delta=current - accepted_time;
             last_msg_delta = current - _socket.get_last_time();
+*/
+            
 
             //if((!it->is_loggedin() && clock_delta >= LOGIN_TIMEOUT*CLOCKS_PER_SEC)/* || ( last_msg_delta >= MAX_TIME_BETWEEN_MSG_TIMEOUT*CLOCKS_PER_SEC)*/)
             if(errno != EWOULDBLOCK || errno != EAGAIN )
@@ -185,12 +188,8 @@ int SocketServer::handleInput()
             return SHUTDOWN;
         }
     }
-    else
-    {
-        int a;
-        a=0;
-    }
 
+    return n;
 }
 
 void SocketServer::acceptConnections()

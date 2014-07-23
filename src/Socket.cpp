@@ -91,7 +91,7 @@ void Socket::setSocketInfo(const SocketInfo info)
 
 SocketInfo Socket::accept()
 {
-    int newsocketID,clilen;
+    int clilen;
     struct sockaddr_in cli_addr;
     struct SocketInfo result;
     
@@ -142,7 +142,7 @@ bool Socket::bind(const int port)
     {
         result=false;
         last_error=errno;
-        EADDRINUSE;
+        //EADDRINUSE;
     }
     else
     {
