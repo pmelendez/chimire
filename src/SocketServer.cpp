@@ -184,7 +184,7 @@ int SocketServer::handleInput()
     {
         if(n==SHUTDOWN)
         {
-            ~_Log << "Shutting Down (SocketServer::handleInput)" << endl;
+            ~_Log << "Shutting Down (SocketServer::handleInput)"; 
             return SHUTDOWN;
         }
     }
@@ -200,7 +200,7 @@ void SocketServer::acceptConnections()
 
 void SocketServer::broken_socket(int sig)
 {
-	~_Log << "Broken socket..." << endl;
+	~_Log << "Broken socket..."; 
 }
 
 void SocketServer::msleep(int milsec)

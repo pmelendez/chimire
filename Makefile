@@ -1,6 +1,7 @@
 CXX=g++
-CXXFLAGS=-std=c++11 -Wall -Werror 
-INCLUDEDIR=./include/
+CXXFLAGS=-std=c++11 -Wall -Werror
+INC=./include /submodules/libjson
+INCLUDEDIR=$(foreach d, $(INC), -I$d)
 SOURCEDIR=./src
 OUTPUTNAME=carbon
 BUILDDIR=./builds
@@ -39,7 +40,7 @@ $(DISTDIR):
 
 %.o: $(SOURCEDIR)/%.cpp
 	@echo "$(ACTIVEC) Compiling $(GREEN)$(SOURCEDIR)/$*.cpp $(WHITE)"
-	@$(CXX) -I$(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o #2>&1 | grep error  
+	@$(CXX) $(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o #2>&1 | grep error  
 	
 clean:
 	rm -rf $(BUILDDIR)
