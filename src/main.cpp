@@ -1,3 +1,4 @@
+#include <json.h>
 #include <CarbonApp.h>
 using namespace std;
 
@@ -12,7 +13,17 @@ using namespace std;
 
 int main()
 {
-    CarbonApp::start();
+    //CarbonApp::start();
+    picojson::object o;
+    picojson::value v(5.5);
+
+    o["hello"] = v;
+    o["world"] = picojson::value("!!");
+    
+    std::string json = picojson::value(o).serialize();
+
+    std::cout << json << std::endl;
+    
     return 0;
 }
 
