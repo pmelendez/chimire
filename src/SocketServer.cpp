@@ -21,20 +21,20 @@ bool SocketServer::create(int port)
 {
     if ( ! socket.create() )
     {
-        _Log << "Couldn't create the socket:" < strerror(socket.last_error) < "\n";
+        //_Log << "Couldn't create the socket:" < strerror(socket.last_error) < "\n";
         return false;
     }
 
     if ( ! socket.bind ( port ) )
     {
-      _Log << "Couldn't bind the socket:" < strerror(socket.last_error) < "\n";// << std::endl;
+      //_Log << "Couldn't bind the socket:" < strerror(socket.last_error) < "\n";// << std::endl;
       socket.close();
       return false;
     }
 
     if ( ! socket.listen() )
     {
-      _Log << "Couldn't listen throught the socket\n";
+      //_Log << "Couldn't listen throught the socket\n";
       socket.close();
       return false;
     }
@@ -58,7 +58,7 @@ bool SocketServer::accept()
         socket_pool.push_back(Socket(newsocketinfo));
         auto last = socket_pool.back();
         last.accepted(std::clock());
-        //~_Log << "Accepted Socket #" < socket_pool[socket_pool.size()-1].getSocketInfo().socketID < "\n";
+        ////_Log << "Accepted Socket #" < socket_pool[socket_pool.size()-1].getSocketInfo().socketID < "\n";
         res = true;
     }
     else
@@ -84,7 +84,7 @@ int SocketServer::receive_messages(std::string& msg)
             
             if(msg!="")
             {
-                ~_Log < "Processing message :" < msg < "\n";
+                //_Log < "Processing message :" < msg < "\n";
             }
 
             //PM: ask for the socket credentials here.
@@ -120,9 +120,9 @@ int SocketServer::receive_messages(std::string& msg)
             //if((!it->is_loggedin() && clock_delta >= LOGIN_TIMEOUT*CLOCKS_PER_SEC)/* || ( last_msg_delta >= MAX_TIME_BETWEEN_MSG_TIMEOUT*CLOCKS_PER_SEC)*/)
             if(errno != EWOULDBLOCK || errno != EAGAIN )
             {                
-                /*~_Log < "Erasing socket #" < it->getSocketInfo().socketID < "\n";
-                _Log < "\t\t Reason: Timeout " < (clock_delta/CLOCKS_PER_SEC) < "\n";
-                _Log < "\t\t         Login " < it->is_loggedin() < "\n";
+                /*//_Log < "Erasing socket #" < it->getSocketInfo().socketID < "\n";
+                //_Log < "\t\t Reason: Timeout " < (clock_delta/CLOCKS_PER_SEC) < "\n";
+                //_Log < "\t\t         Login " < it->is_loggedin() < "\n";
 */
                 _socket.close();
                 _socket.shutdown();
@@ -137,7 +137,7 @@ int SocketServer::receive_messages(std::string& msg)
 
 void SocketServer::shutdown()
 {
-    ~_Log << "Closing the server\n" ;
+    //_Log << "Closing the server\n" ;
     for(auto _socket: socket_pool)
     {
         _socket.shutdown();
@@ -184,7 +184,7 @@ int SocketServer::handleInput()
     {
         if(n==SHUTDOWN)
         {
-            ~_Log << "Shutting Down (SocketServer::handleInput)"; 
+            //_Log << "Shutting Down (SocketServer::handleInput)"; 
             return SHUTDOWN;
         }
     }
@@ -200,7 +200,7 @@ void SocketServer::acceptConnections()
 
 void SocketServer::broken_socket(int sig)
 {
-	~_Log << "Broken socket..."; 
+	//_Log << "Broken socket..."; 
 }
 
 void SocketServer::msleep(int milsec)

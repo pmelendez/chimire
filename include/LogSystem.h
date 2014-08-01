@@ -11,18 +11,12 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <json.h> 
 
 class LogSystem {
 public:
     
     virtual ~LogSystem();
-
-    LogSystem& operator ~ ();
-    LogSystem& operator << (std::string line);
-    LogSystem& operator << (int values);
-    LogSystem& operator << (const char* line);
-    LogSystem& operator < (std::string line);
-    LogSystem& operator < (int values);
 
     void writetime();
     void writeline(std::string line);

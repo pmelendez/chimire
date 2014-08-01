@@ -6,7 +6,8 @@
  */
 
 #include "LogSystem.h"
-#include <ctime>
+#include <chrono>
+#include <sstream>
 
 LogSystem::LogSystem() {
     file.open("./logserver.log" ,std::fstream::app | std::fstream::ate/*,std::fstream::out*/);
@@ -16,57 +17,22 @@ LogSystem::~LogSystem() {
     file.close();
 }
 
-LogSystem& LogSystem::operator <<(std::string line)
-{
-
-    return *this;
-}
-
-LogSystem& LogSystem::operator ~()
-{
-    return *this;
-}
-
 void LogSystem::writetime()
 {
     write("[" + gettime() + "] ");
 }
 
-LogSystem& LogSystem::operator <<(const char* line)
-{
-    return *this;
-}
-
-LogSystem& LogSystem::operator <<(int value)
-{
-    return *this;
-}
-
-LogSystem& LogSystem::operator <(std::string line)
-{
-    return *this;
-}
-
-LogSystem& LogSystem::operator <(int value)
-{
-   return *this;
-}
-
 std::string LogSystem::gettime()
 {
-    time_t rawtime;
-    struct tm * timeinfo;
-    char buffer [80];
-    std::string str;
+    auto now = std::chrono::system_clock::now();                                                                                                                                             
+    auto duration = now.time_since_epoch();                                                                                                                                                  
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();                                                                                                       
+    auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();                                                                                                   
+    int fraction = (millis - seconds*1000);    
+    std::stringstream ss;
 
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    strftime(buffer, 80 , "%x %I:%M:%S %p", timeinfo);
-    str = buffer;     
-
-    //return asctime (timeinfo);
-    //return ctime(&rawtime);
-    return str;
+    ss << seconds << "." << fraction;            
+    return ss.str();
 }
 
 //PM : this need more work to be less verbose.
