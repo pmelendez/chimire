@@ -28,6 +28,12 @@
 #ifndef picojson_h
 #define picojson_h
 
+#ifdef PICOJSON_USE_UNORDERED_MAP
+#include <unordered_map>
+#else
+#include <map>
+#endif
+
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
@@ -35,7 +41,6 @@
 #include <iostream>
 #include <iterator>
 #include <limits>
-#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -107,7 +112,13 @@ namespace picojson {
   class value {
   public:
     typedef std::vector<value> array;
+
+#ifdef PICOJSON_USE_UNORDERED_MAP
+    typedef std::unordered_map<std::string, value> object;
+#else
     typedef std::map<std::string, value> object;
+#endif
+
     union _storage {
       bool boolean_;
       double number_;
