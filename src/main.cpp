@@ -1,5 +1,4 @@
-#include <json.h>
-#include <chrono>
+#include <LogSystem.h>
 #include <CarbonApp.h>
 using namespace std;
 
@@ -15,17 +14,19 @@ using namespace std;
 int main()
 {
     //CarbonApp::start();
-    picojson::object o;
-    picojson::value v(5.5);
+   INFO("This is an info ");
+   WARNING("This is a warning");
+   DEBUG("This is a debug");
+   ERROR("This is an error");
 
-    o["hello"] = v;
-    o["world"] = picojson::value("!!");
-    
-    std::string json = picojson::value(o).serialize();
+   std::unordered_map<std::string, std::string> t;
+   t["nombre"] = "pedro";
+   t["apellido"] = "melendez";
+   t["mensaje"] = "jaja";
 
-    std::cout << json << std::endl;
+   ERROR(t);
 
-    return 0;
+   return 0;
 }
 
 

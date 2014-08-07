@@ -12,15 +12,16 @@
 #include <sstream>
 #include <string>
 #include <json.h> 
+#include <unordered_map>
 
 class LogSystem {
 public:
     
+    enum severity { debug, info, warning, error  };
     virtual ~LogSystem();
 
-    void writetime();
-    void writeline(std::string line);
-    void write(std::string line);
+    void write(enum severity type ,std::string line);
+    void write(enum severity type, std::unordered_map<std::string, std::string> _vars);
     void close();
 
     std::string gettime();
@@ -33,6 +34,7 @@ public:
     
 private:
 
+    void write(std::string type, std::string line);
     LogSystem();
     std::ofstream file;
 };
@@ -40,6 +42,9 @@ private:
 //static const char* endl="\n";
 
 #define _Log LogSystem::get() 
-
+#define INFO(X) (LogSystem::get().write(LogSystem::severity::info, X))
+#define DEBUG(X) (LogSystem::get().write(LogSystem::severity::debug, X))
+#define WARNING(X) (LogSystem::get().write(LogSystem::severity::warning, X))
+#define ERROR(X) (LogSystem::get().write(LogSystem::severity::error, X))
 #endif	/* _LOGSYSTEM_H */
 
