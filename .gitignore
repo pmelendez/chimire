@@ -1,7 +1,3 @@
-        submodules/cppformat/test/format-test
-        submodules/cppformat/test/gtest-extra-test
-        submodules/cppformat/test/macro-test
-        submodules/cppformat/test/posix-test
-        submodules/cppformat/test/printf-test
-        submodules/cppforma/ttest/util-test
-
+builds/*
+libraries/*
+submodules/picojson/*
