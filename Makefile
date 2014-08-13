@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-std=c++11 -Wall -Werror
-INC=./include ./submodules/picojson
+INC=./include ./submodules/picojson ./submodules/cppformat
 INCLUDEDIR=$(foreach d, $(INC), -I$d)
 SOURCEDIR=./src
 OUTPUTNAME=carbon
@@ -10,7 +10,7 @@ OBJDIR=$(BUILDDIR)/objs
 LIBDIR=../../libraries
 EXECNAME=carbon
 CXXFILES= test.o  main.o
-LIBS= #-ljson
+LIBS= -lformat #-ljson
 
 YELLOW=\033[93m
 RED=\033[91m
