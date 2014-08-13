@@ -12,6 +12,7 @@
 #include <sstream>
 #include <string>
 #include <json.h> 
+#include <format.h>
 #include <unordered_map>
 
 class LogSystem {
