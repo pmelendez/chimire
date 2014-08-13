@@ -43,9 +43,9 @@ private:
 //static const char* endl="\n";
 
 #define _Log LogSystem::get() 
-#define INFO(X) (LogSystem::get().write(LogSystem::severity::info, X))
-#define DEBUG(X) (LogSystem::get().write(LogSystem::severity::debug, X))
-#define WARNING(X) (LogSystem::get().write(LogSystem::severity::warning, X))
-#define ERROR(X) (LogSystem::get().write(LogSystem::severity::error, X))
+#define INFO(...) (LogSystem::get().write(LogSystem::severity::info, fmt::format(__VA_ARGS__)))
+#define DEBUG(...) (LogSystem::get().write(LogSystem::severity::debug, fmt::format(__VA_ARGS__)))
+#define WARNING(...) (LogSystem::get().write(LogSystem::severity::warning, fmt::format(__VA_ARGS__)))
+#define ERROR(...) (LogSystem::get().write(LogSystem::severity::error, fmt::format(__VA_ARGS__)))
 #endif	/* _LOGSYSTEM_H */
 
