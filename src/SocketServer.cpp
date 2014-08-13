@@ -58,7 +58,7 @@ bool SocketServer::accept()
         socket_pool.push_back(Socket(newsocketinfo));
         auto last = socket_pool.back();
         last.accepted(std::clock());
-        INFO("Accepted socket #\n");// socket_pool[socket_pool.size()-1].getSocketInfo().socketID 
+        INFO(fmt::format("Accepted socket #{} ", socket_pool.back().getSocketInfo().socketID));  
         ////_Log << "Accepted Socket #" < socket_pool[socket_pool.size()-1].getSocketInfo().socketID < "\n";
         res = true;
     }
@@ -192,12 +192,6 @@ int SocketServer::handleInput()
 
     return n;
 }
-
-void SocketServer::acceptConnections()
-{
-    accept();
-}
-
 
 void SocketServer::broken_socket(int sig)
 {

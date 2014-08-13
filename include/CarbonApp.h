@@ -56,7 +56,7 @@ class CarbonApp {
             }
 
 
-            std::thread conn_handler_thread( [this]() { while(server.isActive()) { server.acceptConnections();  }  } );
+            std::thread conn_handler_thread( [this]() { while(server.isActive()) { server.accept();  }  } );
             conn_handler_thread.join();
         }
 

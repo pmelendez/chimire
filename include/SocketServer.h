@@ -31,7 +31,6 @@ public:
     int receive_messages(std::string& msg);
     void deliver(std::string msg, Socket& p_socket);
     int handleInput();
-    void acceptConnections();
     void shutdown();
     static const int SHUTDOWN=1000;
     std::string get_user_list(std::string group_id);
