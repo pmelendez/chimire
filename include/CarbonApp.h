@@ -35,7 +35,7 @@ class CarbonApp {
 
                 (void) signal(SIGINT,leave);
                 (void) signal(SIGQUIT,leave);
-                //          (void) signal(SIGPIPE,SocketServer::broken_socket);
+                //(void) signal(SIGPIPE,SocketServer::broken_socket);
                 CarbonApp::instance().initialize();
             }
         }
