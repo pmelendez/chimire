@@ -7,7 +7,7 @@ OUTPUTNAME=carbon
 BUILDDIR=./builds
 DISTDIR=$(BUILDDIR)/dist
 OBJDIR=$(BUILDDIR)/objs
-LIBDIR=../../libraries
+LIBDIR=libraries
 EXECNAME=carbon
 CXXFILES= test.o  main.o
 LIBS= -lformat #-ljson
@@ -30,9 +30,9 @@ vpath %.a $(OBJDIR)
 .PHONY: all test dir
 all: $(DISTDIR)/carbon
 
-$(DISTDIR)/carbon: $(DISTDIR) $(OBJS)
+$(DISTDIR)/carbon: $(DISTDIR) $(OBJS) $(LIBDIR)/libformat.a
 	@echo "$(ACTIVEC) Making Executable $(YELLOW) $(DISTDIR)/$(EXECNAME)  $(WHITE)" 
-	@cd $(OBJDIR) && $(CXX) $(OBJS) -L$(LIBDIR)  -pthread $(LIBS)  -o ../dist/$(EXECNAME)
+	@cd $(OBJDIR) && $(CXX) $(OBJS) -L../../$(LIBDIR)  -pthread $(LIBS)  -o ../dist/$(EXECNAME)
 
 $(DISTDIR):
 	@mkdir -p $(DISTDIR)
@@ -41,7 +41,15 @@ $(DISTDIR):
 %.o: $(SOURCEDIR)/%.cpp
 	@echo "$(ACTIVEC) Compiling $(GREEN)$(SOURCEDIR)/$*.cpp $(WHITE)"
 	@$(CXX) $(INCLUDEDIR) $(CXXFLAGS) -c $(SOURCEDIR)/$*.cpp -o $(OBJDIR)/$*.o #2>&1 | grep error  
-	
+
+$(LIBDIR)/libformat.a:
+	@echo "$(ACTIVEC) Compiling $(GREEN)libformat $(WHITE)"
+	@cd submodules/cppformat/ && cmake .
+	@cd submodules/cppformat/ && make -s 
+	@cp submodules/cppformat/libformat.a $(LIBDIR)
+
 clean:
 	rm -rf $(BUILDDIR)
 
+clean-libs:
+	rm -rf $(LIBDIR)/*
