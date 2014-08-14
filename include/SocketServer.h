@@ -23,11 +23,10 @@
 
 class SocketServer {
 public:
-    SocketServer();
-    SocketServer(const SocketServer& orig);
+    SocketServer() {};
     bool create(int port);
     bool accept();
-    virtual ~SocketServer();
+    virtual ~SocketServer() {};
     int receive_messages(std::string& msg);
     void deliver(std::string msg, Socket& p_socket);
     int handleInput();

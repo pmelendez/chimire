@@ -8,33 +8,24 @@
 #include <errno.h>
 
 
-SocketServer::SocketServer() {
-}
-
-SocketServer::SocketServer(const SocketServer& orig) {
-}
-
-SocketServer::~SocketServer() {
-}
-
 bool SocketServer::create(int port)
 {
     if ( ! socket.create() )
     {
-        //_Log << "Couldn't create the socket:" < strerror(socket.last_error) < "\n";
+        ERROR( "Couldn't create the socket: {}", strerror(socket.last_error) );
         return false;
     }
 
     if ( ! socket.bind ( port ) )
     {
-      //_Log << "Couldn't bind the socket:" < strerror(socket.last_error) < "\n";// << std::endl;
+      ERROR( "Couldn't bind the socket: {}", strerror(socket.last_error));
       socket.close();
       return false;
     }
 
     if ( ! socket.listen() )
     {
-      //_Log << "Couldn't listen throught the socket\n";
+      ERROR("Couldn't listen throught the socket");
       socket.close();
       return false;
     }
@@ -58,8 +49,7 @@ bool SocketServer::accept()
         socket_pool.push_back(Socket(newsocketinfo));
         auto last = socket_pool.back();
         last.accepted(std::clock());
-        INFO("Accepted socket #{} ", socket_pool.back().getSocketInfo().socketID);
-        ////_Log << "Accepted Socket #" < socket_pool[socket_pool.size()-1].getSocketInfo().socketID < "\n";
+        INFO("Accepted socket #{0} IP:{1}", socket_pool.back().getSocketInfo().socketID, inet_ntoa(newsocketinfo.serv_addr.sin_addr));
         res = true;
     }
     else
