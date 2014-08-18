@@ -49,7 +49,11 @@ bool SocketServer::accept()
         socket_pool.push_back(Socket(newsocketinfo));
         auto last = socket_pool.back();
         last.accepted(std::clock());
-        INFO("Accepted socket #{0} IP:{1}", socket_pool.back().getSocketInfo().socketID, inet_ntoa(newsocketinfo.serv_addr.sin_addr));
+        //INFO("Accepted socket #{0} IP:{1}", socket_pool.back().getSocketInfo().socketID, inet_ntoa(newsocketinfo.serv_addr.sin_addr));
+        log(LogSystem::severity::info, "Accepted this ip",  
+                {{"IP", inet_ntoa(newsocketinfo.serv_addr.sin_addr)}, 
+                {"socket", std::to_string(socket_pool.back().getSocketInfo().socketID)}});
+        
         res = true;
     }
     else

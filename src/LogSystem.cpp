@@ -33,24 +33,30 @@ std::string LogSystem::gettime()
 
 void LogSystem::write(enum severity _severity, std::string line)
 {
-    std::string type= "INFO";
+    std::string type=getSeverity(_severity);
+    write(type, line);
+}
 
+std::string LogSystem::getSeverity(enum severity _severity)
+{
+    std::string type= "INFO";
+    
     if (_severity == severity::debug)
-    {
+    {   
         type = "DEBUG";
     }
 
     if (_severity == severity::warning)
-    {
+    {   
         type = "WARNING";
     }
 
     if (_severity == severity::error)
-    {
+    {   
         type = "ERROR";
     }
 
-    write(type, line);
+    return type;
 }
 
 void LogSystem::write(enum severity type, std::unordered_map<std::string, std::string> _vars)
@@ -63,9 +69,10 @@ void LogSystem::write(enum severity type, std::unordered_map<std::string, std::s
         obj[_item.first] = picojson::value(_item.second);
     }
 
+    obj["type"] = picojson::value(getSeverity(type));
     str_vars = picojson::value(obj).serialize();
 
-    write(type, str_vars);
+    write(obj);
 }
 
 void LogSystem::write(std::string type,std::string line)
@@ -75,10 +82,20 @@ void LogSystem::write(std::string type,std::string line)
 
     obj["message"] = entry;
     obj["type"] = picojson::value(type);
+    
+    write(obj);
+}
+
+void LogSystem::write(picojson::object obj)
+{
+    if(obj.find("message") == obj.end())
+    {
+        obj["message"] = picojson::value("");
+    }
+
     obj["t"] = picojson::value(gettime());
 
     std::string json = picojson::value(obj).serialize();
-
     file << json << std::endl;
 }
 
