@@ -76,11 +76,11 @@ int SocketServer::receive_messages(std::string& msg)
         if(n>=0)
         {
             _socket.set_last_time(std::clock());
-            
-            if(msg!="")
-            {
-                //_Log < "Processing message :" < msg < "\n";
-            }
+            // Ignore empty messages
+            if(msg =="")
+                continue;
+
+            log(LogSystem::severity::info, "Receiving message", {{"incomming message", msg}});
 
             //PM: ask for the socket credentials here.
             if(msg=="!exit\r\n")
@@ -88,11 +88,6 @@ int SocketServer::receive_messages(std::string& msg)
                 shutdown();
                 return SHUTDOWN;
             }
-
-            // Ignore empty messages
-            if(msg =="")
-                continue;
-
         }
         else
         {

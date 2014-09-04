@@ -2,3 +2,24 @@
 	path = submodules/cppformat
     url = https://github.com/cppformat/cppformat.git
     ignore = dirty
+[submodule "submodules/libevents"]
+	path = submodules/libevents
+	url = https://pmelendez@bitbucket.org/pmelendez/libevents.git
+[submodule "submodules/REACT-CPP"]
+	path = submodules/REACT-CPP
+	url = https://github.com/CopernicaMarketingSoftware/REACT-CPP.git
+[submodule "submodules/libev"]
+	path = submodules/libev
+	url = https://github.com/mendsley/libev.git
+[submodule "submodules/c-ares"]
+	path = submodules/c-ares
+	url = https://github.com/bagder/c-ares.git
+[submodule "REACT-CPP"]
+	path = REACT-CPP
+	url = https://github.com/CopernicaMarketingSoftware/REACT-CPP.git
+[submodule "libev"]
+	path = libev
+	url = https://github.com/mendsley/libev.git
+[submodule "c-ares"]
+	path = c-ares
+	url = https://github.com/bagder/c-ares.git

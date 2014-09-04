@@ -12,6 +12,7 @@
 #include <SocketServer.h>
 
 static const int port = 20111;
+static const int sleep_in_ms = 100;
 
 void leave(int sig);
 void start();
@@ -55,8 +56,10 @@ class CarbonApp {
                 // PM@TODO Launch an error
             }
 
-
-            std::thread conn_handler_thread( [this]() { while(server.isActive()) { server.accept();  }  } );
+           
+            // PM@TODO We probably would need to use epoll or something like it instead of sleep.
+            std::thread conn_accepter_thread( [this]() { while(server.isActive()) { server.accept(); std::this_thread::sleep_for(std::chrono::milliseconds(sleep_in_ms)); }  } );
+            std::thread conn_handler_thread( [this]() { while(server.isActive()) { server.handleInput();  std::this_thread::sleep_for(std::chrono::milliseconds(sleep_in_ms)); }  } );
             conn_handler_thread.join();
         }
 
