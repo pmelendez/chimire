@@ -17,9 +17,3 @@
 [submodule "REACT-CPP"]
 	path = REACT-CPP
 	url = https://github.com/CopernicaMarketingSoftware/REACT-CPP.git
-[submodule "libev"]
-	path = libev
-	url = https://github.com/mendsley/libev.git
-[submodule "c-ares"]
-	path = c-ares
-	url = https://github.com/bagder/c-ares.git
