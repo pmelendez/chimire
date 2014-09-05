@@ -8,12 +8,15 @@
 [submodule "submodules/REACT-CPP"]
 	path = submodules/REACT-CPP
 	url = https://github.com/CopernicaMarketingSoftware/REACT-CPP.git
+    ignore = dirty
 [submodule "submodules/libev"]
 	path = submodules/libev
 	url = https://github.com/mendsley/libev.git
+    ignore = dirty
 [submodule "submodules/c-ares"]
 	path = submodules/c-ares
 	url = https://github.com/bagder/c-ares.git
+    ignore = dirty
 [submodule "REACT-CPP"]
 	path = REACT-CPP
 	url = https://github.com/CopernicaMarketingSoftware/REACT-CPP.git
