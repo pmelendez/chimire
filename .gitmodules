@@ -13,3 +13,6 @@
 	path = submodules/c-ares
 	url = https://github.com/bagder/c-ares.git
     ignore = dirty
+[submodule "submodules/REACT-CPP"]
+	path = submodules/REACT-CPP
+	url = https://github.com/pmelendez/REACT-CPP.git
