@@ -5,10 +5,6 @@
 [submodule "submodules/libevents"]
 	path = submodules/libevents
 	url = https://pmelendez@bitbucket.org/pmelendez/libevents.git
-[submodule "submodules/REACT-CPP"]
-	path = submodules/REACT-CPP
-	url = https://github.com/CopernicaMarketingSoftware/REACT-CPP.git
-    ignore = dirty
 [submodule "submodules/libev"]
 	path = submodules/libev
 	url = https://github.com/mendsley/libev.git
