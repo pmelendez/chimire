@@ -9,6 +9,7 @@
 #include <signal.h>
 #include <stdexcept> 
 #include <thread>
+#include <reactwrapper.h>
 #include <SocketServer.h>
 
 static const int port = 20111;
@@ -61,10 +62,13 @@ class CarbonApp {
             std::thread conn_accepter_thread( [this]() { while(server.isActive()) { server.accept(); std::this_thread::sleep_for(std::chrono::milliseconds(sleep_in_ms)); }  } );
             std::thread conn_handler_thread( [this]() { while(server.isActive()) { server.handleInput();  std::this_thread::sleep_for(std::chrono::milliseconds(sleep_in_ms)); }  } );
             conn_handler_thread.join();
+
+            loop.run();
         }
 
         CarbonApp() {}
         SocketServer server;
+        React::MainLoop loop;
 };
 
 void leave(int sig) {

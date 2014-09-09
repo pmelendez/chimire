@@ -1,6 +1,9 @@
 CXX=g++
 CXXFLAGS=-std=c++11 -Wall -Werror
-INC=./include ./submodules/picojson ./submodules/cppformat ./submodules/libevents/libevents
+INCDIR=include
+INC=./include ./submodules/picojson ./submodules/cppformat \
+	./submodules/libevents/libevents ./submodules/libev \
+	./submodules/c-ares
 INCLUDEDIR=$(foreach d, $(INC), -I$d)
 SOURCEDIR=./src
 OUTPUTNAME=carbon
@@ -10,11 +13,11 @@ OBJDIR=$(BUILDDIR)/objs
 LIBDIR=libraries
 EXECNAME=carbon
 CXXFILES= test.o  main.o
-LIBS= -lformat #-ljson
+LIBS= -lformat -lev -lcares -lreactcpp #-ljson
 CURRDIR=$(shell pwd)
 LD_LIBRARY_PATH=$(CURRDIR)/$(LIBDIR)
 SUBMODULES_DIR=$(CURRDIR)/submodules
-SUBMOD_INCLUDES=libev/ c-ares/
+SUBMOD_INCLUDES=libev/ c-ares/ REACT-CPP/
 SUBMOD_INC_PATH=$(foreach d, $(SUBMOD_INCLUDES),$(SUBMODULES_DIR)/$d)
 CPLUS_INCLUDE_PATH=$(SUBMOD_INC_PATH)
 C_INCLUDE_PATH=$(CPLUS_INCLUDE_PATH)
@@ -42,7 +45,7 @@ vpath %.a $(OBJDIR)
 .PHONY: all test dir
 all: $(DISTDIR)/carbon
 
-$(DISTDIR)/carbon: $(DISTDIR) $(OBJS) $(LIBDIR)/libformat.a $(LIBDIR)/libreactcpp.a
+$(DISTDIR)/carbon: $(DISTDIR) $(LIBDIR)/libformat.a $(LIBDIR)/libreactcpp.a $(OBJS) 
 	@echo "$(ACTIVEC) Making Executable $(YELLOW) $(DISTDIR)/$(EXECNAME)  $(WHITE)" 
 	@cd $(OBJDIR) && $(CXX) $(OBJS) -L../../$(LIBDIR)  -pthread $(LIBS)  -o ../dist/$(EXECNAME)
 
@@ -60,18 +63,21 @@ $(LIBDIR)/libformat.a:
 	@cd submodules/cppformat/ && make -s 
 	@cp submodules/cppformat/libformat.a $(LIBDIR)
 
-$(LIBDIR)/libreactcpp.a: $(LIBDIR)/libcares.a $(LIBDIR)/libev.a
+$(LIBDIR)/libreactcpp.a: $(LIBDIR)/libcares.a $(LIBDIR)/libev.so
 	@echo "$(ACTIVEC) Compiling $(GREEN)libreactcpp $(WHITE)"
 	@cd submodules/REACT-CPP/ && CPLUS_INCLUDE_PATH=$(LIB_INC_PATH) LIBRARY_PATH=$(LD_LIBRARY_PATH) make -s
 	@cp ./submodules/REACT-CPP/src/libreactcpp.a $(LIBDIR)
-
+	@cp -f ./submodules/REACT-CPP/reactcpp.h $(INCDIR)
+	@mkdir -p $(INCDIR)/reactcpp
+	@cp -fr ./submodules/REACT-CPP/include/* $(INCDIR)/reactcpp
+	
 $(LIBDIR)/libcares.a:
 	@echo "$(ACTIVEC) Compiling $(GREEN)libares $(WHITE)"
 	@cd submodules/c-ares/ && ./buildconf && ./configure && make -s
 	@cp submodules/c-ares/.libs/libcares.a $(LIBDIR)
 
 
-$(LIBDIR)/libev.a:
+$(LIBDIR)/libev.so:
 	@echo "$(ACTIVEC) Compiling $(GREEN)libev $(WHITE)"
 	@cd submodules/libev/ && ./configure && make -s
 	@cp submodules/libev/.libs/libev.so* $(LIBDIR)
