@@ -13,7 +13,7 @@ OBJDIR=$(BUILDDIR)/objs
 LIBDIR=libraries
 EXECNAME=carbon
 CXXFILES= test.o  main.o
-LIBS= -lformat -lev -lcares -lreactcpp #-ljson
+LIBS= -Wl,--rpath=\$$ORIGIN/$(LIBDIR) -z origin -lformat -lev -lcares -lreactcpp #-ljson
 CURRDIR=$(shell pwd)
 LD_LIBRARY_PATH=$(CURRDIR)/$(LIBDIR)
 SUBMODULES_DIR=$(CURRDIR)/submodules
@@ -81,6 +81,8 @@ $(LIBDIR)/libev.so:
 	@echo "$(ACTIVEC) Compiling $(GREEN)libev $(WHITE)"
 	@cd submodules/libev/ && ./configure && make -s
 	@cp submodules/libev/.libs/libev.so* $(LIBDIR)
+	@mkdir -p $(DISTDIR)/$(LIBDIR)
+	@cp submodules/libev/.libs/libev.so* $(DISTDIR)/$(LIBDIR)
 
 clean:
 	rm -rf $(BUILDDIR)
