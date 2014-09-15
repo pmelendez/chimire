@@ -64,8 +64,8 @@ class CarbonApp {
                 exit(1);
             }
 
-            log (LogSystem::severity::info, "Initializing Carbon");
-            m_loop.onReadable(server.socket().id(), [this]() -> bool { log (LogSystem::severity::info, "Accepting new connection"); server.accept(); return true; } );
+            log ("Initializing Carbon");
+            m_loop.onReadable(server.socket().id(), [this]() -> bool { log ("Accepting new connection"); server.accept(); return true; } );
             m_loop.run();
         }
 

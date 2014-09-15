@@ -42,7 +42,7 @@ private:
     std::ofstream file;
 };
 
-inline error (std::string message)
+inline void error (std::string message)
 {
     LogSystem::get().write(LogSystem::severity::error, message);
 }
@@ -61,7 +61,7 @@ inline void log (std::string message)
 inline void log (std::string message, std::unordered_map<std::string, std::string> other_entries)
 {
     other_entries["message"] = message;
-    LogSystem::get().write(type_entry, other_entries);
+    LogSystem::get().write(LogSystem::severity::info, other_entries);
 }
 #endif	/* _LOGSYSTEM_H */
 

@@ -44,7 +44,7 @@ bool SocketServer::accept()
     SocketInfo newsocketinfo;
     newsocketinfo=m_socket.accept();
 
-    log (LogSystem::severity::info, "SocketServer::accept - New connection ");
+    log ("SocketServer::accept - New connection ");
 
     if(newsocketinfo.socketID>0)
     {
@@ -84,7 +84,7 @@ int SocketServer::receive_messages(std::string& msg)
             if(msg =="")
                 continue;
 
-            log(LogSystem::severity::info, "Receiving message", {{"incomming message", msg}});
+            log("Receiving message", {{"incomming message", msg}});
 
             //PM: ask for the socket credentials here.
             if(msg=="!exit\r\n")
