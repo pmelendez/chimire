@@ -10,7 +10,7 @@
 #include "Socket.h"
 #include "LogSystem.h"
 #include <ctime>
-#include <list>
+#include <unordered_map>
 #include <set>
 
 class SocketServer {
@@ -19,9 +19,9 @@ public:
     bool create(int port);
     bool accept();
     virtual ~SocketServer() {};
-    int receive_messages(std::string& msg);
+    int receive_messages(std::string& msg, int socket_descriptor);
     void deliver(std::string msg, Socket& p_socket);
-    int handleInput();
+    int handleInput(int socket_descriptor);
     void shutdown();
     static const int SHUTDOWN=1000;
     std::string get_user_list(std::string group_id);
@@ -38,7 +38,7 @@ public:
     
 private:
     Socket m_socket;
-    std::list<Socket> socket_pool;
+    std::unordered_map<int, Socket> socket_pool;
 
  };
 

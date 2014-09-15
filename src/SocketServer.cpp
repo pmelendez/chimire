@@ -48,15 +48,15 @@ bool SocketServer::accept()
 
     if(newsocketinfo.socketID>0)
     {
-        socket_pool.push_back(Socket(newsocketinfo));
-        auto last = socket_pool.back();
-        last.accepted(std::clock());
+	socket_pool[newsocketinfo.socketID] = Socket(newsocketinfo);
+	auto socket_descriptor_id = newsocketinfo.socketID;
+        socket_pool[newsocketinfo.socketID].accepted(std::clock());
         log(fmt::format("Accepted this ip {}", inet_ntoa(newsocketinfo.serv_addr.sin_addr)) ,  
                 {{"IP", inet_ntoa(newsocketinfo.serv_addr.sin_addr)}, 
-                {"socket", std::to_string(socket_pool.back().getSocketInfo().socketID)}});
+                {"socket", std::to_string(newsocketinfo.socketID)}});
         
         CarbonApp::instance().loop().onReadable(newsocketinfo.socketID,
-                [this]()->bool { this->handleInput(); return true;  } );
+                [this, socket_descriptor_id]()->bool { this->handleInput(socket_descriptor_id); return true;  } );
 
         res = true;
     }
@@ -68,62 +68,31 @@ bool SocketServer::accept()
     return res;
 }
 
-int SocketServer::receive_messages(std::string& msg)
+int SocketServer::receive_messages(std::string& msg, int socket_descriptor)
 {
     int n=-1;
+    auto& _socket = socket_pool[socket_descriptor];
+    
+    n = _socket.recv(msg);
 
-    //PM@TODO Probably using epoll would be better than this
-
-    for (auto& _socket : socket_pool )
+    if (n>0)
     {
-        n = _socket.recv(msg);
-        if(n>=0)
-        {
-            _socket.set_last_time(std::clock());
-            // Ignore empty messages
-            if(msg =="")
-                continue;
+	    _socket.set_last_time(std::clock());
+	    // Ignore empty messages
+	    if(msg =="")
+		    return n;
 
-            log("Receiving message", {{"incomming message", msg}});
+	    log("Receiving message", {{"incomming message", msg}});
 
-            //PM: ask for the socket credentials here.
-            if(msg=="!exit")
-            {
-                shutdown();
-                return SHUTDOWN;
-            }
-        }
-        else
-        {
-            /* We have no pending messages, let's check if the socket is logged in
-               if not we are closing it if the time is out*/
+	    _socket.send(msg);
 
-            // PM@TODO In the case of last message time we should try to write on the socket to see if it is responding.
-            // some like <if last_msg_delta >= MAXTIME*3/4 then send a keep alive message>
+	    //PM: ask for the socket credentials here.
+	    if(msg=="!exit")
+	    {
+		    shutdown();
+		    return SHUTDOWN;
+	    }
 
-            /*clock_t current= std::clock();
-            clock_t clock_delta, accepted_time;
-            clock_t last_msg_delta;
-
-            accepted_time = _socket.get_accepted_time();
-            clock_delta=current - accepted_time;
-            last_msg_delta = current - _socket.get_last_time();
-*/
-            
-
-            //if((!it->is_loggedin() && clock_delta >= LOGIN_TIMEOUT*CLOCKS_PER_SEC)/* || ( last_msg_delta >= MAX_TIME_BETWEEN_MSG_TIMEOUT*CLOCKS_PER_SEC)*/)
-            if(errno != EWOULDBLOCK || errno != EAGAIN )
-            {                
-                /*//_Log < "Erasing socket #" < it->getSocketInfo().socketID < "\n";
-                //_Log < "\t\t Reason: Timeout " < (clock_delta/CLOCKS_PER_SEC) < "\n";
-                //_Log < "\t\t         Login " < it->is_loggedin() < "\n";
-*/
-                _socket.close();
-                _socket.shutdown();
-
-                //socket_pool.erase(it);
-            }
-        }
     }
 
     return n;
@@ -134,7 +103,7 @@ void SocketServer::shutdown()
     //_Log << "Closing the server\n" ;
     for(auto _socket: socket_pool)
     {
-        _socket.shutdown();
+        _socket.second.shutdown();
     }
     m_socket.shutdown();
 
@@ -153,23 +122,23 @@ void SocketServer::deliver(std::string msg, Socket& p_socket)
 
     for(auto _socket: socket_pool)
     {
-        n=_socket.send(msg);
+        n=_socket.second.send(msg);
         
         if(n<0)
         {
             // We have problems
-            _socket.shutdown();
+            _socket.second.shutdown();
             // erase from socket pool
         }
     }
 }
 
-int SocketServer::handleInput()
+int SocketServer::handleInput(int socket_descriptor)
 {
     std::string str;
     int n;
 
-    n=receive_messages(str);
+    n=receive_messages(str,socket_descriptor);
 
     if(n>=0)
     {
