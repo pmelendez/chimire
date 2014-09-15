@@ -42,16 +42,23 @@ private:
     std::ofstream file;
 };
 
-//static const char* endl="\n";
+inline error (std::string message)
+{
+    LogSystem::get().write(LogSystem::severity::error, message);
+}
 
-#define _Log LogSystem::get() 
-#define INFO(...) (LogSystem::get().write(LogSystem::severity::info, fmt::format(__VA_ARGS__)))
-#define DEBUG(...) (LogSystem::get().write(LogSystem::severity::debug, fmt::format(__VA_ARGS__)))
-#define WARNING(...) (LogSystem::get().write(LogSystem::severity::warning, fmt::format(__VA_ARGS__)))
-#define ERROR(...) (LogSystem::get().write(LogSystem::severity::error, fmt::format(__VA_ARGS__)))
+inline void error (std::string message, std::unordered_map<std::string, std::string> other_entries)
+{
+    other_entries["message"] = message;
+    LogSystem::get().write(LogSystem::severity::error, other_entries);
+}
 
+inline void log (std::string message)
+{
+    LogSystem::get().write(LogSystem::severity::info, message);
+}
 
-inline void log (LogSystem::severity type_entry, std::string message, std::unordered_map<std::string, std::string> other_entries)
+inline void log (std::string message, std::unordered_map<std::string, std::string> other_entries)
 {
     other_entries["message"] = message;
     LogSystem::get().write(type_entry, other_entries);

@@ -6,28 +6,28 @@
 #include <stdexcept>
 #include <algorithm>
 #include <errno.h>
-
+#include <CarbonApp.h>
 
 bool SocketServer::create(int port)
 {
-    if ( ! socket.create() )
+    if ( ! m_socket.create() )
     {
-        ERROR( "Couldn't create the socket: {}", strerror(socket.last_error) );
+        error( "Couldn't create the socket", {{"reason", strerror(m_socket.last_error)}});
         return false;
     }
 
-    if ( ! socket.bind ( port ) )
+    if ( ! m_socket.bind ( port ) )
     {
-      ERROR( "Couldn't bind the socket: {}", strerror(socket.last_error));
-      socket.close();
-      return false;
+        error( "Couldn't bind the socket:", {{"reason", strerror(m_socket.last_error)}});
+        m_socket.close();
+        return false;
     }
 
-    if ( ! socket.listen() )
+    if ( ! m_socket.listen() )
     {
-      ERROR("Couldn't listen throught the socket");
-      socket.close();
-      return false;
+        error("Couldn't listen throught the socket");
+        m_socket.close();
+        return false;
     }
 
     return true;
@@ -35,25 +35,29 @@ bool SocketServer::create(int port)
 
 bool SocketServer::isActive()
 {
-    return socket.is_open();
+    return m_socket.is_open();
 }
 
 bool SocketServer::accept()
 {
     bool res=false;
     SocketInfo newsocketinfo;
-    newsocketinfo=socket.accept();
+    newsocketinfo=m_socket.accept();
+
+    log (LogSystem::severity::info, "SocketServer::accept - New connection ");
 
     if(newsocketinfo.socketID>0)
     {
         socket_pool.push_back(Socket(newsocketinfo));
         auto last = socket_pool.back();
         last.accepted(std::clock());
-        //INFO("Accepted socket #{0} IP:{1}", socket_pool.back().getSocketInfo().socketID, inet_ntoa(newsocketinfo.serv_addr.sin_addr));
-        log(LogSystem::severity::info, "Accepted this ip",  
+        log(fmt::format("Accepted this ip {}", inet_ntoa(newsocketinfo.serv_addr.sin_addr)) ,  
                 {{"IP", inet_ntoa(newsocketinfo.serv_addr.sin_addr)}, 
                 {"socket", std::to_string(socket_pool.back().getSocketInfo().socketID)}});
         
+        CarbonApp::instance().loop().onReadable(newsocketinfo.socketID,
+                [this]()->bool { this->handleInput(); return true;  } );
+
         res = true;
     }
     else
@@ -132,7 +136,7 @@ void SocketServer::shutdown()
     {
         _socket.shutdown();
     }
-    socket.shutdown();
+    m_socket.shutdown();
 
 }
 

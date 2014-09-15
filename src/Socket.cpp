@@ -198,7 +198,7 @@ bool Socket::connect(const std::string host, const int port)
 bool Socket::create()
 {
     bool res=false;
-    socketID = socket(AF_INET, SOCK_STREAM |SOCK_NONBLOCK , 0);
+    socketID = socket(AF_INET, SOCK_STREAM, 0); // |SOCK_NONBLOCK , 0);
 
     if(socketID>0)
     {

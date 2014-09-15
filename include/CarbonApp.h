@@ -11,6 +11,7 @@
 #include <thread>
 #include <reactwrapper.h>
 #include <SocketServer.h>
+#include <functional>
 
 static const int port = 20111;
 static const int sleep_in_ms = 100;
@@ -29,20 +30,24 @@ class CarbonApp {
             {
                 run_once = false;
                 std::string msg;
-
-                (void) signal(SIGKILL,killed);
-                (void) signal(SIGSTOP,killed);
-                (void) signal(SIGTERM,killed);
-                (void) signal(SIGHUP,killed);
-
-                (void) signal(SIGINT,leave);
-                (void) signal(SIGQUIT,leave);
-                //(void) signal(SIGPIPE,SocketServer::broken_socket);
+                auto handler = []() -> bool { log("Shutting down Carbon") ;  exit(0); return false; };
+                auto error_handler = []() -> bool { log("Interrupting Carbon") ;  exit(1); return false; };
+                CarbonApp::instance().loop().onSignal(SIGINT, handler);
+                CarbonApp::instance().loop().onSignal(SIGQUIT, handler);
+                
+                CarbonApp::instance().loop().onSignal(SIGKILL, error_handler);
+                CarbonApp::instance().loop().onSignal(SIGSTOP, error_handler);
+                CarbonApp::instance().loop().onSignal(SIGTERM, error_handler);
+                CarbonApp::instance().loop().onSignal(SIGHUP, error_handler);
                 CarbonApp::instance().initialize();
             }
         }
 
-    private:
+        inline React::MainLoop& loop() 
+        {
+            return m_loop;
+        }
+
         static CarbonApp& instance()
         {
             static CarbonApp m_instance;
@@ -50,39 +55,23 @@ class CarbonApp {
 
         }
 
+    private:
         void initialize() 
         {
             if(!server.create(port))
             {
-                // PM@TODO Launch an error
+                // We could not bind the socket to the port so we are exitting the application
+                exit(1);
             }
 
-           
-            // PM@TODO We probably would need to use epoll or something like it instead of sleep.
-            std::thread conn_accepter_thread( [this]() { while(server.isActive()) { server.accept(); std::this_thread::sleep_for(std::chrono::milliseconds(sleep_in_ms)); }  } );
-            std::thread conn_handler_thread( [this]() { while(server.isActive()) { server.handleInput();  std::this_thread::sleep_for(std::chrono::milliseconds(sleep_in_ms)); }  } );
-            conn_handler_thread.join();
-
-            loop.run();
+            log (LogSystem::severity::info, "Initializing Carbon");
+            m_loop.onReadable(server.socket().id(), [this]() -> bool { log (LogSystem::severity::info, "Accepting new connection"); server.accept(); return true; } );
+            m_loop.run();
         }
 
         CarbonApp() {}
         SocketServer server;
-        React::MainLoop loop;
+        React::MainLoop m_loop;
 };
-
-void leave(int sig) {
-    //        _Log << "Interrupted..\n";// << endl;
-    //        server.shutdown();
-    exit(sig);
-}
-
-void killed(int sig)
-{
-    //	_Log << "Process Killed ...\n" ;
-    //	_Log << "Shutting down server because a signal:" << sig << "\n";
-    //	server.shutdown();
-    exit(sig);
-}
 
 #endif

@@ -35,6 +35,7 @@ public:
     std::string get_user_list(std::string group_id);
     std::string get_groups();
     bool isActive();
+    inline const Socket& socket() { return m_socket; }
 
     // PM: Time out from accepting the socket until the client perform the login
     static const int LOGIN_TIMEOUT=15;
@@ -44,7 +45,7 @@ public:
     static void msleep(int milsec );
     
 private:
-    Socket socket;
+    Socket m_socket;
     std::list<Socket> socket_pool;
 
     // PM: The problem is here. It is allocating Message objects and no the real subclass.

@@ -58,6 +58,8 @@ public:
 
     int last_error;
 
+    inline int id() const { return socketID; }
+
     static const int NULL_SOCKET=-100;
     static const int DEFAULT_MAXCONNECTIONS=1000;
 private:

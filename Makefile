@@ -47,6 +47,8 @@ all: $(DISTDIR)/carbon
 
 $(DISTDIR)/carbon: $(DISTDIR) $(LIBDIR)/libformat.a $(LIBDIR)/libreactcpp.a $(OBJS) 
 	@echo "$(ACTIVEC) Making Executable $(YELLOW) $(DISTDIR)/$(EXECNAME)  $(WHITE)" 
+	@mkdir -p $(DISTDIR)/$(LIBDIR)
+	@cp submodules/libev/.libs/libev.so* $(DISTDIR)/$(LIBDIR)
 	@cd $(OBJDIR) && $(CXX) $(OBJS) -L../../$(LIBDIR)  -pthread $(LIBS)  -o ../dist/$(EXECNAME)
 
 $(DISTDIR):
@@ -81,9 +83,7 @@ $(LIBDIR)/libev.so:
 	@echo "$(ACTIVEC) Compiling $(GREEN)libev $(WHITE)"
 	@cd submodules/libev/ && ./configure && make -s
 	@cp submodules/libev/.libs/libev.so* $(LIBDIR)
-	@mkdir -p $(DISTDIR)/$(LIBDIR)
-	@cp submodules/libev/.libs/libev.so* $(DISTDIR)/$(LIBDIR)
-
+	
 clean:
 	rm -rf $(BUILDDIR)
 
