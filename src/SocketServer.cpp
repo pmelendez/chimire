@@ -87,7 +87,7 @@ int SocketServer::receive_messages(std::string& msg)
             log("Receiving message", {{"incomming message", msg}});
 
             //PM: ask for the socket credentials here.
-            if(msg=="!exit\r\n")
+            if(msg=="!exit")
             {
                 shutdown();
                 return SHUTDOWN;
@@ -144,9 +144,6 @@ void SocketServer::deliver(std::string msg, Socket& p_socket)
 {
     int n;
     std::vector<Socket>::iterator it;
-    //DeliverableMessage dm;
-
-    //dm.set(msg);
 
     if(p_socket.getSocketInfo().socketID != Socket::NULL_SOCKET )
     {

@@ -2,9 +2,6 @@
 	path = submodules/cppformat
     url = https://github.com/cppformat/cppformat.git
     ignore = dirty
-[submodule "submodules/libevents"]
-	path = submodules/libevents
-	url = https://pmelendez@bitbucket.org/pmelendez/libevents.git
 [submodule "submodules/libev"]
 	path = submodules/libev
 	url = https://github.com/mendsley/libev.git
