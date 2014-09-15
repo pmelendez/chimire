@@ -1,4 +1,5 @@
 This tools are needed to be installed in order to compile:
     * automake
     * libtool (used by c-ares)
+    * cmake (used by libformat)
 

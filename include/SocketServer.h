@@ -2,7 +2,6 @@
  * File:   SocketServer.h
  * Author: pedro
  *
- * Created on October 17, 2010, 2:43 PM
  */
 
 #ifndef _SOCKETSERVER_H
@@ -13,13 +12,6 @@
 #include <ctime>
 #include <list>
 #include <set>
-//#include <boost/shared_ptr.hpp>
-
-//#include <boost/array.hpp>
-
-
-//typedef boost::shared_ptr<Message> MessagePtr;
-
 
 class SocketServer {
 public:
@@ -48,11 +40,7 @@ private:
     Socket m_socket;
     std::list<Socket> socket_pool;
 
-    // PM: The problem is here. It is allocating Message objects and no the real subclass.
-    // the problem is how to call the proper version of the function without an explicit cast.
-   // std::vector<MessagePtr> message_manager;
-
-};
+ };
 
 #endif	/* _SOCKETSERVER_H */
 

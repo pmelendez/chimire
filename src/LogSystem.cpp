@@ -11,7 +11,7 @@
 #include <json.h>
 
 LogSystem::LogSystem() {
-    file.open("./logserver.log" ,std::fstream::app | std::fstream::ate/*,std::fstream::out*/);
+    file.open("./logserver.log" ,std::fstream::app | std::fstream::ate);
 }
 
 LogSystem::~LogSystem() {

@@ -25,7 +25,7 @@ struct ISocket
     virtual bool bind ( const int port ) = 0;
     virtual bool listen() = 0;
     virtual bool listen(const int p_max_connections) = 0;
-    virtual SocketInfo accept ( /*Socket&*/ ) = 0;
+    virtual SocketInfo accept ( ) = 0;
     virtual void accepted(clock_t pTime) = 0;
     virtual void close() = 0;
     virtual void shutdown() = 0;

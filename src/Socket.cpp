@@ -30,7 +30,6 @@ Socket::Socket(const Socket& orig) {
     max_connections= DEFAULT_MAXCONNECTIONS;
     setSocketInfo(orig.getSocketInfo());
 
-    //init_variables();
     m_is_open=orig_socket.is_open();
     last_error=orig_socket.last_error;
     m_is_loggedin=orig_socket.is_loggedin();
@@ -101,11 +100,6 @@ SocketInfo Socket::accept()
     result.socketID=::accept(socketID, (struct sockaddr *) &cli_addr, (socklen_t*)&clilen);
     result.serv_addr=cli_addr;
 
-    /*if(result.socketID>0)
-    {
-        m_accepted_time = std::clock();
-    }*/
-
     return result;
 }
 
@@ -133,7 +127,7 @@ bool Socket::bind(const int port)
     bzero((char *) &serv_addr, sizeof(serv_addr));
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = INADDR_ANY; //ntohl(INADDR_LOOPBACK);
+    serv_addr.sin_addr.s_addr = INADDR_ANY; 
     serv_addr.sin_port = htons(port);
 
     status=::bind(socketID, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
@@ -142,7 +136,6 @@ bool Socket::bind(const int port)
     {
         result=false;
         last_error=errno;
-        //EADDRINUSE;
     }
     else
     {
@@ -198,7 +191,7 @@ bool Socket::connect(const std::string host, const int port)
 bool Socket::create()
 {
     bool res=false;
-    socketID = socket(AF_INET, SOCK_STREAM, 0); // |SOCK_NONBLOCK , 0);
+    socketID = socket(AF_INET, SOCK_STREAM, 0); 
 
     if(socketID>0)
     {
@@ -216,7 +209,6 @@ bool Socket::create()
         last_error=errno;
         return false;
     }
-    //PM: check this... SO_LINGER
    
     return res;
 }
@@ -258,7 +250,7 @@ int Socket::recv(std::string& msg) const
 
 bool Socket::send(const std::string &msg) 
 {
-    /*bool res=true;
+    bool res=true;
     int status;
 
     status=write(socketID,msg.c_str(),msg.size());
@@ -266,11 +258,9 @@ bool Socket::send(const std::string &msg)
     if(status==-1)
     {
         res=false;
-    }*/
+    }
 
-
-
-    return true; //send(new_msg);
+    return res;
 }
 
 void Socket::operator =(int p_socket_id)

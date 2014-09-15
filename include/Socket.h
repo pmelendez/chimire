@@ -34,7 +34,7 @@ public:
     bool bind ( const int port );
     bool listen();
     bool listen(const int p_max_connections);
-    SocketInfo accept ( /*Socket&*/ );
+    SocketInfo accept ( );
     void accepted(clock_t pTime);
     void close();
     void shutdown();
