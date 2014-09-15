@@ -2,3 +2,4 @@ builds/*
 libraries/*
 submodules/picojson/*
 *.log
+include/reactcpp*
