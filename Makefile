@@ -6,12 +6,12 @@ INC=./include ./submodules/picojson ./submodules/cppformat \
 	./submodules/c-ares
 INCLUDEDIR=$(foreach d, $(INC), -I$d)
 SOURCEDIR=./src
-OUTPUTNAME=carbon
+OUTPUTNAME=chimire
 BUILDDIR=./builds
 DISTDIR=$(BUILDDIR)/dist
 OBJDIR=$(BUILDDIR)/objs
 LIBDIR=libraries
-EXECNAME=carbon
+EXECNAME=chimire
 CXXFILES= test.o  main.o
 LIBS= -Wl,--rpath=\$$ORIGIN/$(LIBDIR) -z origin -lformat -lev -lcares -lreactcpp #-ljson
 CURRDIR=$(shell pwd)
@@ -40,12 +40,12 @@ OBJS := Socket.o SocketServer.o LogSystem.o main.o
 
 vpath %.o $(OBJDIR)
 vpath %.a $(OBJDIR)
-#vpath carbon $(DISTDIR)
+#vpath chimire $(DISTDIR)
 
 .PHONY: all test dir
-all: $(DISTDIR)/carbon
+all: $(DISTDIR)/chimire
 
-$(DISTDIR)/carbon: $(DISTDIR) $(LIBDIR)/libformat.a $(LIBDIR)/libreactcpp.a $(OBJS) 
+$(DISTDIR)/chimire: $(DISTDIR) $(LIBDIR)/libformat.a $(LIBDIR)/libreactcpp.a $(OBJS) 
 	@echo "$(ACTIVEC) Making Executable $(YELLOW) $(DISTDIR)/$(EXECNAME)  $(WHITE)" 
 	@mkdir -p $(DISTDIR)/$(LIBDIR)
 	@cp submodules/libev/.libs/libev.so* $(DISTDIR)/$(LIBDIR)
